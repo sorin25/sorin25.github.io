@@ -1,18 +1,26 @@
-<html>
-<head>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-ZXE31F2H60"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-ZXE31F2H60');
-</script>
-
-</head>
-<body>
-<h1>Hello World</h1>
-</body>
-</html>
+---
+title: Home
+---
+<section class="blog-list px-3 py-5 p-md-5">
+    <div class="container single-col-max-width">
+{% for post in site.posts %}
+	<div class="item mb-5">
+	    <div class="row g-3 g-xl-0">
+		<div class="col-2 col-xl-3">
+		    <img class="img-fluid post-thumb " src="assets/images/blog/{{post.thumb}}" alt="image">
+		</div>
+		<div class="col">
+			<h3 class="title mb-1"><a class="text-link" href="{{post.url}}">{{post.title}}</a></h3>
+			<div class="meta mb-1">
+                            <span class="date">Published on {{post.date | date_to_long_string: "ordinal"}}</span>
+                            <!--<span class="time">5 min read</span>-->
+                        </div>
+			<div class="intro">{{post.excerpt}}</div>
+				<a class="text-link" href="{{post.url}}">Read more &rarr;</a>
+		</div><!--//col-->
+	    </div><!--//row-->
+	</div><!--//item-->
+{% endfor %}
+    </div> <!--container-->
+</section>
 

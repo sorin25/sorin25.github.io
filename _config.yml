@@ -1,0 +1,8 @@
+markdown_ext: "md"
+markdown: kramdown
+exclude: [README.md, dev-server.sh, CNAME ]
+defaults:
+  -
+    values:
+      layout: "default"
+
