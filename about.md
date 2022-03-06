@@ -5,7 +5,7 @@ title: About Me
 
 # About Me
 
-Practical programmer with {% ycnt %} years of experience. 
+Practical programmer with 22 years of experience. 
 
 I have written a hello world in the following languages:
 
