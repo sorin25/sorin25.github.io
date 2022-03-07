@@ -9,5 +9,4 @@ I'm glad that you found my contributions intriguing enough spend some time looki
 
 {% include w4h.md %}
 
-If you need me to urgently answer one of your questions on Stack Overflow, you may consider my fiver gig!
 
