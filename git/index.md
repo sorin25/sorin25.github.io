@@ -3,8 +3,6 @@ layout: article
 title: Welcome Git users 
 ---
 
-# {{ page.title }}
-
 I'm actually pleasantly surprised that you found this place. I don't have too many Git contributions! Thank you for interest! 
 
 {% include w4h.md %}

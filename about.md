@@ -3,8 +3,6 @@ layout: article
 title: About Me
 ---
 
-# About Me
-
 Practical programmer with 22 years of experience. 
 
 I have written a hello world in the following languages:
