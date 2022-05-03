@@ -1,6 +1,6 @@
 ---
 title: Given the current trend, when will I reach my ideal weight ?
-thumb: blog-post-thumb-3.jpg
+thumb: blog-post-thumb-8.jpg
 layout: article
 ---
 
@@ -13,7 +13,7 @@ I record my weight multiple times a day, mostly because the [Viva OMRON scale](h
 
 To graph the current streak data I would need the list of day averages relative to the start date:
 
-```
+```SQL
 SELECT avg(weight) AS weight, DATEDIFF(date(record_date), start_date) AS day 
         FROM weight_log WHERE record_date > @start_date GROUP BY date(record_date);
 ```
@@ -30,7 +30,7 @@ $$ intercept = \overline{y} - slope \cdot \overline{x} $$
 
 The formula for linear regression slope needs the average of both X and Y axis. 
 
-```
+```SQL
 SELECT 
         avg(weight) AS weight_average,
         avg(day) AS day_average 
@@ -47,7 +47,7 @@ SELECT
 Since we will need the data in several places, let's use stored procedure and save it in memory table for reuse. 
 
 
-```
+```SQL
 DELIMITER //
 DROP PROCEDURE IF EXISTS get_weight_slope //
 
