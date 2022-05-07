@@ -17,7 +17,7 @@ A better way would be to compute the time to respond and the time to resolve in 
 
 Each change in status is stored in an array in the request document, let's name it `logs`. Each entry has a few elements `user`, `status`, `date` that are relevant in this case. 
 
-The definition for **time to respond** is the time that passes from the moment the request is created until it's assigned to someone. Each requests starts with a log entry with `status` set to 'new'. The initial design had the assumption that the next log entry would always be the one for assigning the request to someone. At a first glance that would seem reasonable. We can use an [aggregation pipeline](https://docs.mongodb.com/v4.2/aggregation/) to compute additional fields. [$substract](https://docs.mongodb.com/v4.2/reference/operator/aggregation/subtract/index.html#subtract-two-dates) is used to get the difference in milliseconds the first 2 dates in the logs array, [$arrayElemAt](https://docs.mongodb.com/v4.2/reference/operator/aggregation/arrayElemAt/index.html) is used to access the first and second element of the log array. The formula `$logs.date` may seem strange, I can't find any documentation on it (except a [defect](https://jira.mongodb.org/browse/SERVER-37246) and an associated documentation [task](https://jira.mongodb.org/browse/DOCS-12068)), but it works.
+The definition for **time to respond** is the time that passes from the moment the request is created until it's assigned to someone. Each requests starts with a log entry with `status` set to 'new'. The initial design had the assumption that the next log entry would always be the one for assigning the request to someone. At a first glance that would seem reasonable. We can use an [aggregation pipeline](https://docs.mongodb.com/v4.2/aggregation/) to compute additional fields. [$subtract](https://docs.mongodb.com/v4.2/reference/operator/aggregation/subtract/index.html#subtract-two-dates) is used to get the difference in milliseconds the first 2 dates in the logs array, [$arrayElemAt](https://docs.mongodb.com/v4.2/reference/operator/aggregation/arrayElemAt/index.html) is used to access the first and second element of the log array. The formula `$logs.date` may seem strange, I can't find any documentation on it (except a [defect](https://jira.mongodb.org/browse/SERVER-37246) and an associated documentation [task](https://jira.mongodb.org/browse/DOCS-12068)), but it works.
 
 ```
 db.requests.aggregate([{
@@ -80,22 +80,22 @@ db.requests.aggregate([{
 
 As you can see the computations will become more and more complex, and we haven't even started on the time to resolve. What if we update the `time_to_respond` key when we assign someone to the request. This is a bit more complicated and requires a fairly new MongoDB server, in order to be able to use an update instruction with an aggregation pipeline so you can refer to the updated document. 
 
-## Use an aggregation pipeline during the update to update the `time_to_respose`
+## Use an aggregation pipeline during the update to update the `time_to_respond`
 
 In order to be able to refer to the existing document in an update, you need to use an aggregation pipeline. When updating the request as assigned to someone, we would like to:
  - set the request assignee and status, 
  - add a log entry with the assignment info 
- - update the `time_to_response`
+ - update the `time_to_respond`
 
 The first two can be done with a simple update:
 
 ```
 db.requests.updateOne({_id: ObjectId('xxx')},{
-    $set: {assingee: "XXX", "status": "In Progress"},
+    $set: {assignee: "XXX", "status": "In Progress"},
     $push: { logs: {...}}})
 ```
 
-However updating the `time_to_response` requires referencing the previous version of the document and computing the difference between the first log entry and the current log entry. To complicate the things more, there is no support for `$push` in the update aggregation pipeline. 
+However updating the `time_to_respond` requires referencing the previous version of the document and computing the difference between the first log entry and the current log entry. To complicate the things more, there is no support for `$push` in the update aggregation pipeline. 
 
 ```
 db.requests.updateOne({"_id" : ObjectId("XXXX")},[{ 
@@ -126,7 +126,7 @@ db.requests.updateOne({"_id" : ObjectId("XXXX")},[{
                     "status" : "In Progress",
                     "user" : "sorin",
                     "date" : "$$NOW", 
-                    "description" : "Issue assigned to OPS Team"
+                    "description" : "Issue assigned"
                 }]]
             }
         }
